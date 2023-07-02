@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  tomcat:
+    remote-ip-header: x-forwarded-for
+
+spring:
+  application:
+    name: translation_poc
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    username: ${TRANSLATION_POSTGRES_USERNAME:}
+    password: ${TRANSLATION_POSTGRES_PASSWORD:}
+    url: ${TRANSLATION_POSTGRES_URL:}
+    hikari:
+      pool-name: postgresql-pool
+      connectionTimeout: 60000
+      maximum-pool-size: ${TRANSLATION_POSTGRES_MAX_POOL:50}
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibername.ddl-auto: validate
+      #hibernate.show_sql: true
+      #hibernate.use_sql_comments: true
+      #hibernate.format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase.change-log: classpath:db/databaseChangeLog.xml
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
+
+  sql:
+    init:
+      continue-on-error: false
+logging:
+  level:
+    root: info
+app:
